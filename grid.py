@@ -32,8 +32,8 @@ def returnGrids(yours,enemy):
     print("  " + nums + "    " + nums)
     print("-"*((len(yours)+4)*2))
 
-#~ is untouched space, * is a miss, # is a hit, number is unknown ship.
-#Ships: (A)ircraft Carrier - 5, (B)attleship - 4, (S)ubmarine - 3, (C)ruiser - 3, (D)estroyer - 2
+#~ is untouched space, * is a miss, # is a hit, letter is unknown ship.
+#Ships: (A)ircraft Carrier - A, (B)attleship - B, (S)ubmarine - S, (C)ruiser - C, (D)estroyer - D
 
 def returnUserGrid(grid):
     print("-"*((len(grid)+2)))
@@ -98,7 +98,7 @@ def placeEnemyShips(grid):
             else:
                 count += 1
                 if count > 100:
-                    return -1
+                    return grid
         
         enemyGrid = placeShip(SHIP_LENGTHS[ship], ship, (posX, posY), rotation, enemyGrid)
     return enemyGrid
@@ -123,4 +123,24 @@ def setupUserGrid(grid):
     
     return userGrid
 
+def checkValidShot(enemyGrid,pos):
+    try:
+        valid = enemyGrid[pos[1]][pos[0]] == "~"
+        return valid
+    except IndexError:
+        return False
 
+def shoot(enemyGrid,pos):
+    current = enemyGrid[pos[1]][pos[0]]
+    if current in "ABCDS":
+        enemyGrid[pos[1]][pos[0]] = "#"
+        return enemyGrid, True
+    elif current == "~":
+        enemyGrid[pos[1]][pos[0]] = "*"
+        return enemyGrid, False
+    return enemyGrid, False
+
+def generateCoord(grid):
+    yCoord = randint(0,len(grid))
+    xCoord = randint(0,len(grid[0]))
+    return (xCoord, yCoord)
