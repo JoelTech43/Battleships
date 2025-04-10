@@ -19,19 +19,30 @@ def enemyTurn(grids):
 
 def userTurn(grids):
     print("YOUR TURN")
-    coords = input("Input Coordinate: ")
+    coords = input("Input Coordinate: ").upper()
     try:
         xCoord = int(coords[0])
         yCoord = ALPHA_COORDS[coords[1]]
+        valid = checkValidShot(grids["enemy"],(xCoord,yCoord))
     except ValueError:
-        xCoord = ALPHA_COORDS[coords[0]]
-        yCoord = int(coords[1]) 
-    valid = checkValidShot(grids["enemy"],(xCoord,yCoord))
+        yCoord = ALPHA_COORDS[coords[0]]
+        xCoord = int(coords[1]) 
+        valid = checkValidShot(grids["enemy"],(xCoord,yCoord))
+    except:
+        valid = False
     while not valid:
         print("Enter a valid or unchecked coordinate from the enemy grid.")
-        xCoord = int(input("Input X Coordinate: "))
-        yCoord = ALPHA_COORDS[input("Input Y Coordinate: ")]
-        valid = checkValidShot(grids["enemy"],(xCoord,yCoord))
+        coords = input("Input Coordinate: ").upper()
+        try:
+            xCoord = int(coords[0])
+            yCoord = ALPHA_COORDS[coords[1]]
+            valid = checkValidShot(grids["enemy"],(xCoord,yCoord))
+        except ValueError:
+            yCoord = ALPHA_COORDS[coords[0]]
+            xCoord = int(coords[1])
+            valid = checkValidShot(grids["enemy"],(xCoord,yCoord))
+        except:
+            valid = False
 
     grids["enemy"],hit = shoot(grids["enemy"],(xCoord,yCoord))
     if hit:
@@ -49,13 +60,14 @@ def gameTurn(grids):
     else:
         print("ENEMY MISSED")
     returnGrids(grids["user"],grids["enemy"])
+    return grids
 
 won = False
+print("WELCOME TO BATTLESHIPS")
+grids = setup(10,10)
+returnGrids(grids["user"],grids["enemy"])
 while not won:
-    print("WELCOME TO BATTLESHIPS")
-    grids = setup(10,10)
-    returnGrids(grids["user"],grids["enemy"])
-    gameTurn(grids)
+    grids = gameTurn(grids)
     done = True
     winner = "ENEMY"
     for i in grids["user"]:
@@ -65,7 +77,7 @@ while not won:
                 winner = "USER"
     if not done:
         done = True
-        for i in grids["user"]:
+        for i in grids["enemy"]:
             for j in "ABCDS":
                 if j in i:
                     done = False

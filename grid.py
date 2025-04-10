@@ -111,7 +111,7 @@ def setupUserGrid(grid):
         while not valid:
             pos = ""
             while not(len(pos) == 5 and pos[0].isalpha() and pos[1].isnumeric() and (pos[3:] == "00" or pos[3:] == "90")):
-                pos = input(f"Please enter coordinates and direction for your {ship}, in format \"A3 00\" where A3 is the starting (top-left) coordinate of the ship and 00 is the direction. Please only enter 00 (right) or 90 (down) for the direction, and ensure that your ship won't collide with others or the side of the map: ")
+                pos = input(f"Please enter coordinates and direction for your {ship}, in format \"A3 00\" where A3 is the starting (top-left) coordinate of the ship and 00 is the direction. Please only enter 00 (right) or 90 (down) for the direction, and ensure that your ship won't collide with others or the side of the map: ").upper()
 
             parts = pos.split(" ")
             posX = int(parts[0][1])
@@ -125,7 +125,7 @@ def setupUserGrid(grid):
 
 def checkValidShot(enemyGrid,pos):
     try:
-        valid = enemyGrid[pos[1]][pos[0]] == "~"
+        valid = enemyGrid[pos[1]][pos[0]] in "~ABCDS"
         return valid
     except IndexError:
         return False
